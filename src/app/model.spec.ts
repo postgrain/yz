@@ -21,7 +21,7 @@ describe('Yz Model', () => {
     model.roll();
 
     for (let die of model.dice) {
-      expect(die).not.toBe(0);
+      expect(die.pips).not.toBe(0);
     }
   });
 

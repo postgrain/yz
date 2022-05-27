@@ -1,7 +1,18 @@
 <button (click)="model.start()">start</button>
 <button (click)="model.roll()" [disabled]="!model.canRoll">roll</button>
-<label>{{ model.dice[0] }}</label>
-<label>{{ model.dice[1] }}</label>
-<label>{{ model.dice[2] }}</label>
-<label>{{ model.dice[3] }}</label>
-<label>{{ model.dice[4] }}</label>
+
+<div style="display: flex; flex-direction: row">
+  <div *ngFor="let die of model.dice">
+    <figure>
+      <figcaption>
+        {{ die.pips }}
+      </figcaption>
+
+      <img
+        [src]="die.image.src"
+        [width]="die.image.width"
+        [height]="die.image.height"
+      />
+    </figure>
+  </div>
+</div>
