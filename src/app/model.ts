@@ -1,7 +1,10 @@
 import { DieModel } from './die-model';
+import { YzGame } from './yz-game';
+
 
 export class YzModel {
   private rollTimes = 0;
+  private game = new YzGame();
 
   constructor(
     public dice = [
@@ -23,14 +26,10 @@ export class YzModel {
 
   roll() {
     if (!this.canRoll) throw new Error('Illegal roll called!');
-    this.rollTimes--;
-
-    this.dice.forEach((die) => {
-      die.pips = this.getRandomInt(6) + 1;
+    this.game.dice.roll();
+    this.dice.forEach((die, i) => {
+      die.pips = this.game.dice.pips[i];
     });
-  }
-
-  getRandomInt(max: number) {
-    return Math.floor(Math.random() * max);
+    this.rollTimes--;
   }
 }
