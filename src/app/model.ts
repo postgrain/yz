@@ -1,9 +1,7 @@
 import { DieModel } from './die-model';
 import { YzGame } from './yz-game';
 
-
 export class YzModel {
-  private rollTimes = 0;
   private game = new YzGame();
 
   constructor(
@@ -17,19 +15,22 @@ export class YzModel {
   ) {}
 
   get canRoll() {
-    return this.rollTimes > 0;
+    return this.game.canRoll;
   }
 
   start() {
-    this.rollTimes = 3;
+    this.game.start();
+    this.update();
   }
 
   roll() {
-    if (!this.canRoll) throw new Error('Illegal roll called!');
-    this.game.dice.roll();
+    this.game.roll();
+    this.update();
+  }
+
+  private update() {
     this.dice.forEach((die, i) => {
-      die.pips = this.game.dice.pips[i];
+      die.pips = this.game.pips[i];
     });
-    this.rollTimes--;
   }
 }
