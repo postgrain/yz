@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { YzModel } from './model';
+import { YzModel } from './yz-model';
 
 @Component({
   selector: 'app-root',
