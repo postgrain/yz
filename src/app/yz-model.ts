@@ -1,5 +1,8 @@
 import { DieModel } from './die-model';
 import { YzGame } from './yz-game';
+import { App } from './app';
+import { createReducer, on } from '@ngrx/store';
+import { pipChange } from './dice';
 
 export class YzModel {
   public dice = [
@@ -9,21 +12,35 @@ export class YzModel {
     new DieModel(),
     new DieModel(),
   ];
-  constructor(private game: YzGame = new YzGame()) {}
+
+  constructor(private game: YzGame = new YzGame()) {
+    App.store.addReducer(
+      'yzModel',
+      createReducer(
+        {},
+        on(pipChange, (state, payload) => {
+          this.dice[payload.die].pips = payload.pips;
+          return state;
+        })
+      )
+    );
+  }
+
   get canRoll() {
     return this.game.canRoll;
   }
+
   start() {
     this.game.start();
-    this.update();
   }
+
   roll() {
     this.game.roll();
-    this.update();
   }
-  update() {
-    this.dice.forEach((die, i) => {
-      die.pips = this.game.pips[i];
-    });
-  }
+
+  // como fazer funcionar
+  // @Subscribe(pipChange)
+  // handlePipChange(action: pipChange) {
+  //   this.dice[action.die].pips = action.pips;
+  // }
 }
