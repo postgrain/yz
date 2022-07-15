@@ -1,4 +1,5 @@
 import 'jest-preset-angular/setup-jest';
+import 'reflect-metadata';
 import { TypedAction } from '@ngrx/store/src/models';
 
 import { App, Store } from './src/app/app';

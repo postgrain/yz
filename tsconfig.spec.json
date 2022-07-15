@@ -5,13 +5,7 @@
     "outDir": "./out-tsc/spec",
     "allowJs": true,
     "module": "CommonJs",
-    "types": [
-      "node",
-      "jest"
-    ]
+    "types": ["node", "jest", "reflect-metadata"]
   },
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

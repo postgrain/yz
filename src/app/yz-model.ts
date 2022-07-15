@@ -1,9 +1,9 @@
 import { DieModel } from './die-model';
 import { YzGame } from './yz-game';
-import { App } from './app';
-import { createReducer, on } from '@ngrx/store';
 import { pipChange } from './dice';
+import { HandlesActions, Subscribe } from './subscribe';
 
+@HandlesActions('yzModel')
 export class YzModel {
   public dice = [
     new DieModel(),
@@ -13,18 +13,7 @@ export class YzModel {
     new DieModel(),
   ];
 
-  constructor(private game: YzGame = new YzGame()) {
-    App.store.addReducer(
-      'yzModel',
-      createReducer(
-        {},
-        on(pipChange, (state, payload) => {
-          this.dice[payload.die].pips = payload.pips;
-          return state;
-        })
-      )
-    );
-  }
+  constructor(private game: YzGame = new YzGame()) {}
 
   get canRoll() {
     return this.game.canRoll;
@@ -38,9 +27,8 @@ export class YzModel {
     this.game.roll();
   }
 
-  // como fazer funcionar
-  // @Subscribe(pipChange)
-  // handlePipChange(action: pipChange) {
-  //   this.dice[action.die].pips = action.pips;
-  // }
+  @Subscribe(pipChange)
+  syncPips(_: unknown, payload: ReturnType<typeof pipChange>) {
+    this.dice[payload.die].pips = payload.pips;
+  }
 }
