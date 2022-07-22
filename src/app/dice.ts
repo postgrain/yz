@@ -14,14 +14,19 @@ export class Dice {
   constructor(private roller: Roller) {}
 
   roll() {
-    this.pips = this.pips.map((value, die) => {
-      const pips = this.roller.roll();
-      App.store.dispatch(pipChange({ die, pips }));
-      return pips;
-    });
+    for (let i of [0, 1, 2, 3, 4]) {
+      this.changePips(i, this.roller.roll());
+    }
   }
 
   reset() {
-    this.pips = this.pips.map(() => Dice.UNKNOWN);
+    for (let i of [0, 1, 2, 3, 4]) {
+      this.changePips(i, Dice.UNKNOWN);
+    }
+  }
+
+  private changePips(die: number, pips: number) {
+    this.pips[die] = pips;
+    App.store.dispatch(pipChange({ die, pips }));
   }
 }

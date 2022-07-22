@@ -3,6 +3,7 @@ import { Store as NgRxStore } from '@ngrx/store';
 import { TypedAction } from '@ngrx/store/src/models';
 
 export interface Store extends NgRxStore {
+  last<T>(): T;
   assertDispatched<T extends string>(event: TypedAction<T>): void;
 }
 

@@ -1,21 +1,18 @@
 import 'jest-preset-angular/setup-jest';
 import 'reflect-metadata';
-import { TypedAction } from '@ngrx/store/src/models';
 
 import { App, Store } from './src/app/app';
 
-export class FakeStore {
-  private fakeEvents: TypedAction<string>[] = [];
-
+export class FakeStore extends Array {
   dispatch(event: any) {
-    this.fakeEvents.push(event);
+    this.push(event);
   }
 
-  assertDispatched(event: TypedAction<any>) {
-    expect(this.fakeEvents.map((it) => it.type).includes(event.type)).toBe(
-      true
-    );
+  last() {
+    return this[this.length - 1];
   }
 }
 
-App.store = new FakeStore() as unknown as Store;
+beforeEach(() => {
+  App.store = new FakeStore() as unknown as Store;
+});

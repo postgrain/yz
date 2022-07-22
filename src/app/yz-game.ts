@@ -1,11 +1,19 @@
+import { createAction, props } from '@ngrx/store';
+
+import { App } from './app';
 import { Dice } from './dice';
 import { RandomRoller } from './random-roller';
+
+export const canRollChange = createAction(
+  'can roll change',
+  props<{ canRoll: boolean }>()
+);
 
 export class YzGame {
   private rollsInRound = 3;
   private dice = new Dice(new RandomRoller());
 
-  get canRoll() {
+  private get canRoll() {
     return this.rollsInRound < 3;
   }
 
@@ -16,11 +24,13 @@ export class YzGame {
   start() {
     this.rollsInRound = 0;
     this.dice.reset();
+    App.store.dispatch(canRollChange({ canRoll: true }));
   }
 
   roll() {
     if (!this.canRoll) throw new Error('Illegal roll called!');
     this.dice.roll();
     this.rollsInRound += 1;
+    if (!this.canRoll) App.store.dispatch(canRollChange({ canRoll: false }));
   }
 }

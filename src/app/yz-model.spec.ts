@@ -1,25 +1,23 @@
 import { YzModel } from './yz-model';
-import { YzGame } from './yz-game';
-import { Dice } from './dice';
+import { YzGame, canRollChange } from './yz-game';
+import { App } from './app';
 
 describe('Yz Model', () => {
   let model: YzModel;
   let game: YzGame;
+
   beforeEach(() => {
     game = new YzGame();
     model = new YzModel(game);
   });
-  it('updates pips from game', () => {
-    game.start();
-    game.roll();
-    model.update();
-    for (let die of model.dice) {
-      expect(die.pips).not.toBe(Dice.UNKNOWN);
-    }
-  });
-  it('updates canRoll from game', () => {
-    game.start();
-    model.update();
+
+  it('handles canRoll change events', () => {
+    App.store.dispatch(canRollChange({ canRoll: true }));
     expect(model.canRoll).toBe(true);
+  });
+
+  it('handles canRoll change events (false)', () => {
+    App.store.dispatch(canRollChange({ canRoll: false }));
+    expect(model.canRoll).toBe(false);
   });
 });
