@@ -27,6 +27,7 @@ export function HandlesActions(storeKey: string) {
     return class extends c {
       constructor(...args: any[]) {
         super(...args);
+
         const actionsConfigs: ActionConfig[] = Reflect.getOwnMetadata(
           ACTIONS_TO_LISTEN,
           c
@@ -38,18 +39,8 @@ export function HandlesActions(storeKey: string) {
             (...args) => (this as any)[v.propertyKey]?.(...args) || args[0]
           )
         );
-        const reducer = createReducer({}, ...ons);
-        const interval = setInterval(() => {
-          try {
-            // CHECK IF STORE IS ALREADY ON THE INJECTOR
-            if (App.store) {
-              App.store.addReducer(storeKey, reducer);
 
-              clearInterval(interval);
-              return;
-            }
-          } catch (e) {}
-        }, 1);
+        App.store.addReducer(storeKey, createReducer({}, ...ons));
       }
     };
   };
