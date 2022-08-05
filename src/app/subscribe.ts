@@ -1,11 +1,6 @@
-import { ActionCreator, createReducer, on } from '@ngrx/store';
+import { Actions, ofType } from '@ngrx/effects';
+import { ActionCreator } from '@ngrx/store';
 import { App } from './app';
-
-/**
- * Problema:
- * - O ngrx não permite mais de um reducer para a mesma action
- * por isso não será possível adicionar mais de um listener para uma action.
- */
 
 /**
  * [v2] - Definir metadata no construtor da classe
@@ -13,7 +8,7 @@ import { App } from './app';
  * então, quando a classe é instanciada nós criamos os reducers com base nessa metadata.
  *
  * # Possíveis problemas:
- * - Memory leak pois o reducer não é removido automaticamente quando o objeto é destruído.
+ * - Memory leak pois o a inscrição do observable não é removida automaticamente quando o objeto é destruído.
  */
 
 interface ActionConfig<T = ActionCreator> {
@@ -22,25 +17,30 @@ interface ActionConfig<T = ActionCreator> {
 }
 
 export const ACTIONS_TO_LISTEN: unique symbol = Symbol('__actionsToListen');
-export function HandlesActions(storeKey: string) {
-  return function <T extends { new (...args: any[]): {} }>(c: T) {
+//TODO: implementar onDestroy
+export function HandleActions() {
+  return function <
+    T extends new (...args: any[]) => {
+    }
+  >(c: T) {
     return class extends c {
       constructor(...args: any[]) {
         super(...args);
-
+        const actions$ = App.injector.get(Actions)
         const actionsConfigs: ActionConfig[] = Reflect.getOwnMetadata(
           ACTIONS_TO_LISTEN,
           c
         );
 
-        const ons = actionsConfigs.map((v: any) =>
-          on(
-            v.action,
-            (...args) => (this as any)[v.propertyKey]?.(...args) || args[0]
-          )
-        );
-
-        App.store.addReducer(storeKey, createReducer({}, ...ons));
+        actionsConfigs.forEach((item) => {
+          actions$
+              .pipe( ofType(item.action))
+              .subscribe({
+                next: (action) => {
+                  (this as any)[item.propertyKey]?.(action);
+                },
+            });
+        });
       }
     };
   };

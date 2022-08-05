@@ -1,4 +1,4 @@
-import { NgModule, Injector } from '@angular/core';
+import { NgModule, Injector, ApplicationRef, DoBootstrap } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -14,12 +14,14 @@ import { AppComponent } from './app.component';
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({}),
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+  ]
 })
-export class AppModule {
+export class AppModule implements DoBootstrap{
   constructor(injector: Injector) {
     App.setInjector(injector);
+  }
+
+  ngDoBootstrap(app: ApplicationRef) {
+    app.bootstrap(AppComponent);
   }
 }

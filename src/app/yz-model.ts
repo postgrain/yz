@@ -1,9 +1,9 @@
 import { DieModel } from './die-model';
 import { YzGame, canRollChange } from './yz-game';
 import { pipChange } from './dice';
-import { HandlesActions, Subscribe } from './subscribe';
+import { HandleActions, Subscribe } from './subscribe';
 
-@HandlesActions('yzModel')
+@HandleActions()
 export class YzModel {
   public canRoll = false;
   public dice = [
@@ -17,12 +17,12 @@ export class YzModel {
   constructor(private game: YzGame = new YzGame()) {}
 
   @Subscribe(canRollChange)
-  handleCanRollChange(_: unknown, payload: ReturnType<typeof canRollChange>) {
+  handleCanRollChange(payload: ReturnType<typeof canRollChange>) {
     this.canRoll = payload.canRoll;
   }
 
   @Subscribe(pipChange)
-  handlePipChange(_: unknown, payload: ReturnType<typeof pipChange>) {
+  handlePipChange(payload: ReturnType<typeof pipChange>) {
     this.dice[payload.die].pips = payload.pips;
   }
 

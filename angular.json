@@ -67,6 +67,20 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "making-app": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "./src/yz-view.ts",
+                  "with": "./src/making-view.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -79,6 +93,9 @@
             },
             "development": {
               "browserTarget": "yahtzee:build:development"
+            },
+            "making-app": {
+              "browserTarget": "yahtzee:build:making-app"
             }
           },
           "defaultConfiguration": "development"

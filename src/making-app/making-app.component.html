@@ -1,0 +1,10 @@
+<div class="tool-bar">
+  <button (click)="model.dispatchPipChange()">Tool</button>
+  <button (click)="model.toggleSidenav()">Toggle Events sidenav</button>
+</div>
+<div class="side-nav" *ngIf="model.showSidenav">
+  <h3>Events list:</h3>
+  <div class="side-nav__item" *ngFor="let item of model.events$ | async">
+    {{ item.type }}
+  </div>
+</div>
