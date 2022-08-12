@@ -15,35 +15,45 @@ interface ActionConfig<T = ActionCreator> {
   propertyKey: string;
   action: T;
 }
+type ClassConstructor = new (...args: any[]) => {}
 
 export const ACTIONS_TO_LISTEN: unique symbol = Symbol('__actionsToListen');
 //TODO: implementar onDestroy
 export function HandleActions() {
-  return function <
-    T extends new (...args: any[]) => {
-    }
-  >(c: T) {
-    return class extends c {
+  return function <T extends ClassConstructor>(klass: T) {
+    return class extends klass {
       constructor(...args: any[]) {
         super(...args);
-        const actions$ = App.injector.get(Actions)
-        const actionsConfigs: ActionConfig[] = Reflect.getOwnMetadata(
-          ACTIONS_TO_LISTEN,
-          c
-        );
-
-        actionsConfigs.forEach((item) => {
-          actions$
-              .pipe( ofType(item.action))
-              .subscribe({
-                next: (action) => {
-                  (this as any)[item.propertyKey]?.(action);
-                },
-            });
-        });
+        const handler = new ActionHandler(this, klass)
+        handler.listenTo()
       }
     };
   };
+}
+
+class ActionHandler{
+  constructor(private target: any, private klass: any){}
+  
+  get actionsConfigs(){
+    const actionsConfigs: ActionConfig[] = Reflect.getOwnMetadata(
+      ACTIONS_TO_LISTEN,
+      this.klass
+    );
+    return actionsConfigs
+  }
+  
+  listenTo(){
+    const actions$ = App.injector.get(Actions)
+    this.actionsConfigs.forEach((item) => {
+      actions$
+          .pipe( ofType(item.action))
+          .subscribe({
+            next: (action) => {
+              this.target[item.propertyKey]?.(action);
+            },
+        });
+    });
+  }
 }
 
 export function Subscribe<T extends ActionCreator>(action: T) {

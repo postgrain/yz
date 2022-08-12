@@ -14,7 +14,6 @@ export class MakingAppModel {
   @Subscribe(pipChange)
   @Subscribe(canRollChange)
   handleEvents(payload: ReturnType<typeof pipChange | typeof canRollChange>) {
-    console.log('events')
     this.events$.next([...this.events$.getValue(),
       payload
     ]
