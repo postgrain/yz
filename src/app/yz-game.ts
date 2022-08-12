@@ -9,6 +9,11 @@ export const canRollChange = createAction(
   props<{ canRoll: boolean }>()
 );
 
+export const gameStart = createAction(
+  'game start',
+  props<{ players: string[] }>()
+);
+
 export class YzGame {
   private rollsInRound = 3;
   private dice = new Dice(new RandomRoller());

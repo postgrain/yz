@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { YzModel } from './yz-model';
+import { GameModel } from './game-model';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +7,5 @@ import { YzModel } from './yz-model';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  model = new YzModel();
+  model = new GameModel();
 }

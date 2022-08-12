@@ -1,11 +1,13 @@
 import { DieModel } from './die-model';
-import { YzGame, canRollChange } from './yz-game';
+import { YzGame, canRollChange, gameStart } from './yz-game';
 import { pipChange } from './dice';
 import { HandleActions, Subscribe } from './subscribe';
+import { PlayerModel } from './player-model';
 
 @HandleActions()
-export class YzModel {
+export class GameModel {
   public canRoll = false;
+  public players: PlayerModel[] = [];
   public dice = [
     new DieModel(),
     new DieModel(),
@@ -24,6 +26,11 @@ export class YzModel {
   @Subscribe(pipChange)
   handlePipChange(payload: ReturnType<typeof pipChange>) {
     this.dice[payload.die].pips = payload.pips;
+  }
+
+  @Subscribe(gameStart)
+  handleGameStart(payload: ReturnType<typeof gameStart>) {
+    this.players = payload.players.map(name => new PlayerModel(name));
   }
 
   start() {
