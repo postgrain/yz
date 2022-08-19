@@ -1,8 +1,9 @@
 import { BehaviorSubject } from "rxjs";
 import { App } from "src/app/app";
 import { pipChange } from "src/app/dice";
+import { PlayerModel } from "src/app/player-model";
 import { HandleActions, Subscribe } from "src/app/subscribe";
-import { canRollChange } from "src/app/yz-game";
+import { canRollChange, currentPlayer, gameOver, gameStart } from "src/app/yz-game";
 
 export interface GameEvents{}
 
@@ -13,6 +14,7 @@ export class MakingAppModel {
 
   @Subscribe(pipChange)
   @Subscribe(canRollChange)
+  @Subscribe(gameStart)
   handleEvents(payload: ReturnType<typeof pipChange | typeof canRollChange>) {
     this.events$.next([...this.events$.getValue(),
       payload
@@ -22,6 +24,29 @@ export class MakingAppModel {
 
   dispatchPipChange(){
     App.store.dispatch(pipChange({ die:2, pips:3 }))
+  }
+
+  start1() {
+    App.store.dispatch(gameStart({ players: [
+      new PlayerModel('Molly'),
+      new PlayerModel('Wally'),
+      new PlayerModel('Geepaw')
+    ] }))
+  }
+
+  start2() {
+    App.store.dispatch(gameStart({ players: [
+      new PlayerModel('Molly'),
+      new PlayerModel('Geepaw')
+    ] }));
+  }
+
+  changeCurrent(playerIndex: number) {
+    App.store.dispatch(currentPlayer({ idx: playerIndex }));
+  }
+
+  gameOver() {
+    App.store.dispatch(gameOver({ winnerIndexes: [] }));
   }
 
   toggleSidenav(){

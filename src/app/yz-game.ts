@@ -2,7 +2,10 @@ import { createAction, props } from '@ngrx/store';
 
 import { App } from './app';
 import { Dice } from './dice';
+import { PlayerModel } from './player-model';
 import { RandomRoller } from './random-roller';
+
+export const NO_PLAYER = -1;
 
 export const canRollChange = createAction(
   'can roll change',
@@ -11,7 +14,17 @@ export const canRollChange = createAction(
 
 export const gameStart = createAction(
   'game start',
-  props<{ players: string[] }>()
+  props<{ players: PlayerModel[] }>()
+);
+
+export const currentPlayer = createAction(
+  'current player',
+  props<{ idx: number }>()
+);
+
+export const gameOver = createAction(
+  'game over',
+  props<{ winnerIndexes: number[] }>()
 );
 
 export class YzGame {

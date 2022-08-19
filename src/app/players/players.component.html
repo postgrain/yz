@@ -1,1 +1,3 @@
-<p>players works!</p>
+<div style="display: flex;">
+  <app-player *ngFor="let player of gameModel.players" [player]="player"></app-player>
+</div>

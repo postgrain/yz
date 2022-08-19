@@ -1,1 +1,4 @@
-<p>player works!</p>
+<div style="min-width: 100px; min-height: 30px;" [style.opacity]="player.isCurrent ? 1 : 0.5">
+  {{ player.name }}
+  <button *ngIf="player.isCurrent">Score!</button>
+</div>

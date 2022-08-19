@@ -1,5 +1,9 @@
 <div class="tool-bar">
-  <button (click)="model.dispatchPipChange()">Tool</button>
+  <button (click)="model.start1()">Start 1</button>
+  <button (click)="model.start2()">Start 2</button>
+  <button (click)="model.changeCurrent(0)">Current 0</button>
+  <button (click)="model.changeCurrent(1)">Current 1</button>
+  <button (click)="model.gameOver()">Game over</button>
   <button (click)="model.toggleSidenav()">Toggle Events sidenav</button>
 </div>
 <div class="side-nav" *ngIf="model.showSidenav">
@@ -8,5 +12,5 @@
     {{ item.type }}
   </div>
 </div>
-<app-root></app-root>
-<app-scores></app-scores>
+<app-root #app></app-root>
+<app-scores [gameModel]="app.model"></app-scores>

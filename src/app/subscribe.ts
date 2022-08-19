@@ -33,7 +33,7 @@ export function HandleActions() {
 
 class ActionHandler{
   constructor(private target: any, private klass: any){}
-  
+
   get actionsConfigs(){
     const actionsConfigs: ActionConfig[] = Reflect.getOwnMetadata(
       ACTIONS_TO_LISTEN,
@@ -41,7 +41,7 @@ class ActionHandler{
     );
     return actionsConfigs
   }
-  
+
   listenTo(){
     const actions$ = App.injector.get(Actions)
     this.actionsConfigs.forEach((item) => {

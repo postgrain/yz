@@ -10,9 +10,10 @@ import { ScoresComponent } from './scores/scores.component';
 import { PlayersComponent } from './players/players.component';
 import { PlayerComponent } from './player/player.component';
 import { DescriptionComponent } from './description/description.component';
+import { GameOverComponent } from './game-over/game-over.component';
 
 @NgModule({
-  declarations: [AppComponent, ScoresComponent, PlayersComponent, PlayerComponent, DescriptionComponent],
+  declarations: [AppComponent, ScoresComponent, PlayersComponent, PlayerComponent, DescriptionComponent, GameOverComponent],
   imports: [
     BrowserModule,
     StoreModule.forRoot({}),

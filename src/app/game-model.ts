@@ -1,5 +1,5 @@
 import { DieModel } from './die-model';
-import { YzGame, canRollChange, gameStart } from './yz-game';
+import { YzGame, canRollChange, gameStart, currentPlayer, gameOver } from './yz-game';
 import { pipChange } from './dice';
 import { HandleActions, Subscribe } from './subscribe';
 import { PlayerModel } from './player-model';
@@ -7,6 +7,7 @@ import { PlayerModel } from './player-model';
 @HandleActions()
 export class GameModel {
   public canRoll = false;
+  public isGameOver = false;
   public players: PlayerModel[] = [];
   public dice = [
     new DieModel(),
@@ -30,7 +31,18 @@ export class GameModel {
 
   @Subscribe(gameStart)
   handleGameStart(payload: ReturnType<typeof gameStart>) {
-    this.players = payload.players.map(name => new PlayerModel(name));
+    this.isGameOver = false;
+    this.players = payload.players;
+  }
+
+  @Subscribe(currentPlayer)
+  handleCurrentPlayer(payload: ReturnType<typeof currentPlayer>) {
+    this.players = this.players.map((player, idx) => ({ ...player, isCurrent: payload.idx === idx }));
+  }
+
+  @Subscribe(gameOver)
+  handleGameOver(payload: ReturnType<typeof gameOver>) {
+    this.isGameOver = true;
   }
 
   start() {

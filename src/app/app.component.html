@@ -1,18 +1,22 @@
-<button (click)="model.start()">start</button>
-<button (click)="model.roll()" [disabled]="!model.canRoll">roll</button>
+<ng-container *ngIf="!model.isGameOver">
+  <button (click)="model.start()">start</button>
+  <button (click)="model.roll()" [disabled]="!model.canRoll">roll</button>
 
-<div style="display: flex; flex-direction: row">
-  <div *ngFor="let die of model.dice">
-    <figure>
-      <figcaption>
-        {{ die.pips }}
-      </figcaption>
+  <div style="display: flex; flex-direction: row">
+    <div *ngFor="let die of model.dice">
+      <figure>
+        <figcaption>
+          {{ die.pips }}
+        </figcaption>
 
-      <img
-        [src]="die.image.src"
-        [width]="die.image.width"
-        [height]="die.image.height"
-      />
-    </figure>
+        <img
+          [src]="die.image.src"
+          [width]="die.image.width"
+          [height]="die.image.height"
+        />
+      </figure>
+    </div>
   </div>
-</div>
+</ng-container>
+
+<app-game-over *ngIf="model.isGameOver"></app-game-over>
